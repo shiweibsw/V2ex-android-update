@@ -8,6 +8,7 @@ import android.widget.TabHost;
 
 import com.bsw.v2ex.R;
 import com.bsw.v2ex.ui.fragment.ViewPagerFragment;
+import com.bsw.v2ex.utils.MessageUtils;
 import com.bsw.v2ex.widget.ChangeColorIconWithText;
 import com.umeng.update.UmengUpdateAgent;
 
@@ -20,6 +21,7 @@ public class MainActivity extends BaseActivity implements TabHost.OnTabChangeLis
     private LayoutInflater mLayoutInflater;
     private List<ChangeColorIconWithText> mTabIndicators = new ArrayList<ChangeColorIconWithText>();
 
+    private long exitTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +106,17 @@ public class MainActivity extends BaseActivity implements TabHost.OnTabChangeLis
             menuKey.setBoolean(config, false);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (System.currentTimeMillis() - exitTime > 2000) {
+            MessageUtils.showToast(this, getString(R.string.main_exitapp_hint));
+            exitTime = System.currentTimeMillis();
+        } else {
+            finish();
         }
     }
 }
