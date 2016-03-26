@@ -8,6 +8,7 @@ import android.widget.TabHost;
 
 import com.bsw.v2ex.R;
 import com.bsw.v2ex.ui.fragment.ViewPagerFragment;
+import com.bsw.v2ex.utils.AccountUtils;
 import com.bsw.v2ex.utils.MessageUtils;
 import com.bsw.v2ex.widget.ChangeColorIconWithText;
 import com.umeng.update.UmengUpdateAgent;
@@ -33,7 +34,10 @@ public class MainActivity extends BaseActivity implements TabHost.OnTabChangeLis
 
         setOverflowButtonAlways();
         initTabHost();
-
+        if (mIsLogin) {
+            AccountUtils.refreshProfile(this);//刷新个人信息
+            AccountUtils.refreshFavoriteNodes(this, null);//刷新收藏
+        }
     }
 
     @Override
@@ -56,10 +60,12 @@ public class MainActivity extends BaseActivity implements TabHost.OnTabChangeLis
         String[] texts = new String[3];
         ChangeColorIconWithText[] tabviews = new ChangeColorIconWithText[3];
 
+        Bundle bundle = new Bundle();
+        bundle.putInt("type", ViewPagerFragment.TypeViewPager_Aggregation);
         texts[0] = getString(R.string.title_activity_main_discovery);
         tabviews[0] = getTabView(R.layout.item_tab_discovery);
         tabSpecs[0] = mTabHost.newTabSpec(texts[0]).setIndicator(tabviews[0]);
-        mTabHost.addTab(tabSpecs[0], ViewPagerFragment.class, null);
+        mTabHost.addTab(tabSpecs[0], ViewPagerFragment.class, bundle);
         mTabIndicators.add(tabviews[0]);
 
         texts[1] = getString(R.string.title_activity_main_nodes);
@@ -111,7 +117,6 @@ public class MainActivity extends BaseActivity implements TabHost.OnTabChangeLis
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         if (System.currentTimeMillis() - exitTime > 2000) {
             MessageUtils.showToast(this, getString(R.string.main_exitapp_hint));
             exitTime = System.currentTimeMillis();

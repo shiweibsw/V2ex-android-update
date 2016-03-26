@@ -26,7 +26,7 @@ public class ProfileModel extends BaseModel implements Parcelable {
     public int followings;
     public int notifications;
 
-    protected ProfileModel() {
+    public ProfileModel() {
 
     }
 

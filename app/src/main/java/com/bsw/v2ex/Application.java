@@ -1,5 +1,6 @@
 package com.bsw.v2ex;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
 import android.text.TextUtils;
@@ -71,6 +72,18 @@ public class Application extends android.app.Application {
         mPushMessage = isMessagePush();
     }
 
+    public static Application getInstance() {
+        return mContext;
+    }
+
+    public static Context getContext() {
+        return mContext;
+    }
+
+    public static V2EXDataSource getDataSource() {
+        return mDataSource;
+    }
+
     /**
      * 是否Https登录
      * 使用到了Properties用来读取本地配置
@@ -97,7 +110,14 @@ public class Application extends android.app.Application {
         else
             return Boolean.parseBoolean(perf_json);
     }
-
+    /**
+     * 是否显示动画效果
+     *
+     * @return
+     */
+    public boolean isShowEffectFromCache() {
+        return mShowEffect;
+    }
     /**
      * 是否显示动画效果
      *
@@ -137,6 +157,14 @@ public class Application extends android.app.Application {
             return Boolean.parseBoolean(perf_message);
     }
 
+    /**
+     * 是否Https登录
+     *
+     * @return
+     */
+    public boolean isHttpsFromCache() {
+        return mHttps;
+    }
 
     public String getProperty(String key) {
         return AppConfig.getAppConfig(this).get(key);

@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import com.bsw.v2ex.model.ProfileModel;
 import com.bsw.v2ex.ui.BaseActivity;
 import com.bsw.v2ex.utils.AccountUtils;
+import com.bsw.v2ex.widget.FootUpdate;
 import com.umeng.analytics.MobclickAgent;
 
 /**
@@ -15,7 +16,7 @@ public class BaseFragment extends Fragment implements AccountUtils.OnAccountList
     protected boolean mIsLogin;
     protected ProfileModel mLoginProfile;
     protected BackHandledInterface mBackHandledInterface;
-
+    protected FootUpdate mFootUpdate = new FootUpdate();
     public static interface BackHandledInterface {
         public abstract void setSelectedFragment(BaseFragment selectedFragment);
     }
