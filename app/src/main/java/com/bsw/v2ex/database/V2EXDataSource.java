@@ -52,7 +52,9 @@ public class V2EXDataSource {
      */
     private int getTopicField(int topicId, String column) {
         int result = 0;
-        Cursor cursor = database.query(DatabaseHelper.TOPIC_TABLE_NAME, allNodeColumns, DatabaseHelper.TOPIC_COLUMN_TOPICID + "=" + topicId, null, null, null, null);
+        Cursor cursor = database.query(DatabaseHelper.TOPIC_TABLE_NAME, allNodeColumns,
+                DatabaseHelper.TOPIC_COLUMN_TOPICID + " = " + topicId, null,
+                null, null, null);
         if (cursor != null && cursor.getCount() > 0 && cursor.moveToFirst()) {
             result = cursor.getInt(cursor.getColumnIndex(column));
             cursor.close();
@@ -70,7 +72,8 @@ public class V2EXDataSource {
         return false;
     }
 
-    private String[] allNodeColumns = {DatabaseHelper.NODE_COLUMN_NODENAME,
-            DatabaseHelper.NODE_COLUMN_ISFAVOR};
+    private String[] allNodeColumns = {DatabaseHelper.TOPIC_COLUMN_TOPICID,
+            DatabaseHelper.TOPIC_COLUMN_READ,
+            DatabaseHelper.TOPIC_COLUMN_FAVOR};
 
 }

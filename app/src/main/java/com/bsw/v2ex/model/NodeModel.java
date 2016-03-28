@@ -108,7 +108,7 @@ public class NodeModel extends BaseModel implements Parcelable {
         if ((strings[5] = footer) == null) {
             strings[5] = "";
         }
-        dest.readStringArray(strings);
+        dest.writeStringArray(strings);
         dest.writeBooleanArray(new boolean[]{isCollected});
     }
 

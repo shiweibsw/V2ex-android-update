@@ -45,6 +45,10 @@ public class ViewPagerFragment extends BaseFragment {
         mType = getArguments().getInt("type");
         if (mType == TypeViewPager_Favorite) {
 
+
+
+
+
         } else {
             mViewPager.setAdapter(new AggregateTopicsAdapter(getChildFragmentManager(), getActivity()));
             mPagerSlidingTabStrip.setViewPager(mViewPager);

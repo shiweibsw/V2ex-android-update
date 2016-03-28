@@ -184,16 +184,79 @@ public class V2EXManager {
             }
         });
     }
-    public static void getLatestTopics(Context context,boolean refersh,HttpRequestHandler<ArrayList<TopicModel>> handler){
+
+    /**
+     * 获取最新话题
+     *
+     * @param context
+     * @param refersh
+     * @param handler
+     */
+    public static void getLatestTopics(Context context, boolean refersh, HttpRequestHandler<ArrayList<TopicModel>> handler) {
+        getTopics(context, getBaseAPIUrl() + API_LATEST, refersh, handler);
+    }
+
+    /**
+     * 获取最热话题
+     *
+     * @param context
+     * @param refersh
+     * @param handler
+     */
+    public static void getHotTopics(Context context, boolean refersh, HttpRequestHandler<ArrayList<TopicModel>> handler) {
+        getTopics(context, getBaseAPIUrl() + API_HOT, refersh, handler);
+    }
+
+    public static void getTopicsByTab(Context context, String tab, boolean refresh, final HttpRequestHandler<ArrayList<TopicModel>> handler) {
+        getCategoryTopics(context, getBaseUrl() + "/?tab=" + tab, refresh, handler);
+    }
+
+
+    /**
+     * 获取各类话题列表
+     *
+     * @param context
+     * @param urlString
+     * @param refersh
+     * @param handler
+     */
+    public static void getTopics(Context context, String urlString, boolean refersh, HttpRequestHandler<ArrayList<TopicModel>> handler) {
+        Uri uri = Uri.parse(urlString);
+        String path = uri.getLastPathSegment();
+        String param = uri.getEncodedQuery();
+        String key = path;
+        if (param != null) {
+            key += param;
+        }
+        if (!refersh) {
+            ArrayList<TopicModel> topics = PersistenceHelper.loadModelList(context, key);
+            if (topics != null && topics.size() > 0) {
+                SafeHandler.onSuccess(handler, topics);
+                return;
+            }
+        }
+        new AsyncHttpClient().get(context, urlString, new WrappedJsonHttpResponseHandler<TopicModel>(context, TopicModel.class, key, handler));
 
     }
-    public static  void getTopics(Context context,String urlString,boolean refersh,HttpRequestHandler<ArrayList<TopicModel>> handler){
-        Uri uri=Uri.parse(urlString);
 
-
+    /**
+     * 获取所有节点
+     *
+     * @param context
+     * @param refresh
+     * @param handler
+     */
+    public static void getAllNodes(Context context, boolean refresh, HttpRequestHandler<ArrayList<NodeModel>> handler) {
+        final String key = "allnodes";
+        if (!refresh) {
+            ArrayList<NodeModel> nodes = PersistenceHelper.loadModelList(context, key);
+            if (nodes != null && nodes.size() > 0) {
+                SafeHandler.onSuccess(handler, nodes);
+                return;
+            }
+        }
+        new AsyncHttpClient().get(context, getBaseAPIUrl() + API_ALL_NODE, new WrappedJsonHttpResponseHandler<NodeModel>(context, NodeModel.class, key, handler));
     }
-
-
 
 
     private static AsyncHttpClient getClient(Context context) {

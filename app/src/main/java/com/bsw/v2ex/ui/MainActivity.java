@@ -7,6 +7,7 @@ import android.view.ViewConfiguration;
 import android.widget.TabHost;
 
 import com.bsw.v2ex.R;
+import com.bsw.v2ex.ui.fragment.AllNodesFragment;
 import com.bsw.v2ex.ui.fragment.ViewPagerFragment;
 import com.bsw.v2ex.utils.AccountUtils;
 import com.bsw.v2ex.utils.MessageUtils;
@@ -71,7 +72,7 @@ public class MainActivity extends BaseActivity implements TabHost.OnTabChangeLis
         texts[1] = getString(R.string.title_activity_main_nodes);
         tabviews[1] = getTabView(R.layout.item_tab_allnodes);
         tabSpecs[1] = mTabHost.newTabSpec(texts[1]).setIndicator(tabviews[1]);
-        mTabHost.addTab(tabSpecs[1], ViewPagerFragment.class, null);
+        mTabHost.addTab(tabSpecs[1], AllNodesFragment.class, null);
         mTabIndicators.add(tabviews[1]);
 
         texts[2] = getString(R.string.title_activity_main_myinfo);

@@ -33,6 +33,7 @@ import java.util.ArrayList;
  * Created by baishiwei on 2016/3/26.
  */
 public class TopicsFragment extends BaseFragment implements HttpRequestHandler<ArrayList<TopicModel>>, OnScrollToBottomListener {
+    private static final String TAG = "---TopicsFragment-----";
     //0表示最新话题,-1表示最热话题,-2表示收藏的话题,-3表示我的特别关注,其他表示节点下的话题
     public static final int LatestTopics = 0;
     public static final int HotTopics = -1;
@@ -142,6 +143,11 @@ public class TopicsFragment extends BaseFragment implements HttpRequestHandler<A
         } else if (args.containsKey("node_id")) {
             mNodeId = args.getInt("node_id");
             requestTopicsById(false);
+        } else if (args.containsKey("tab")) {
+            mTabName = args.getString("tab");
+            requestTopicsByTab(false);
+        } else {
+            getActivity().finish();
         }
 
     }
@@ -153,7 +159,7 @@ public class TopicsFragment extends BaseFragment implements HttpRequestHandler<A
 
     @Override
     public void onSuccess(ArrayList<TopicModel> data, int totalPages, int currentPage) {
-        mSwipeLayout.setRefreshing(true);
+        mSwipeLayout.setRefreshing(false);
         mIsLoading = false;
         mPage = currentPage;
         mNoMore = totalPages == currentPage;//如果当前页currentPage=总页数totalPages，则mNoMore=false
@@ -173,7 +179,7 @@ public class TopicsFragment extends BaseFragment implements HttpRequestHandler<A
 
     @Override
     public void onFailure(String error) {
-        mSwipeLayout.setRefreshing(true);
+        mSwipeLayout.setRefreshing(false);
         mIsLoading = false;
         MessageUtils.showErrorMessage(getActivity(), error);
         if (mAdapter.getItemCount() > 0 && !mNoMore) {
@@ -203,8 +209,18 @@ public class TopicsFragment extends BaseFragment implements HttpRequestHandler<A
     }
 
     private void requestTopicsById(boolean refresh) {
-        if (mNodeId==LatestTopics){
+        if (mNodeId == LatestTopics) {
+            V2EXManager.getLatestTopics(getActivity(), refresh, this);
+        } else if (mNodeId == HotTopics) {
+            V2EXManager.getHotTopics(getActivity(), refresh, this);
+        }
+    }
 
+    private void requestTopicsByTab(boolean refresh) {
+        if (mTabName.equals("members") && !mIsLogin) {
+            onSuccess(new ArrayList<TopicModel>());//???????
+        } else {
+            V2EXManager.getTopicsByTab(getActivity(), mTabName, refresh, this);//获取发现中除了最新和top10之外其他类型的数据
         }
     }
 }
